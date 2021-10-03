@@ -1,6 +1,8 @@
 spring:
   config:
     use-legacy-processing: true
+    activate:
+      on-profile: common
   main:
     allow-bean-definition-overriding: true
 server:

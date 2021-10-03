@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.6.RELEASE</version>
+        <version>2.5.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -34,12 +34,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>xalan</groupId>
-            <artifactId>xalan</artifactId>
-            <version>2.7.2</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
@@ -85,5 +79,126 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
+        </dependency>
     </dependencies>
+    <build>
+        <plugins>
+
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>build-info</id>
+                    <goals>
+                        <goal>build-info</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <goals>
+                        <goal>repackage</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>start server for acceptance tests</id>
+                    <goals>
+                        <goal>start</goal>
+                    </goals>
+                    <phase>pre-integration-test</phase>
+                    <configuration>
+                        <skip>${skip.IT}</skip>
+                        <wait>5000</wait>
+                        <useTestClasspath>true</useTestClasspath>
+                        <directories>
+                            <directory>${project.basedir}/src/main/resources</directory>
+                            <directory>${project.build.testOutputDirectory}</directory>
+                        </directories>
+                        <fork>false</fork>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>stop server for acceptance tests</id>
+                    <goals>
+                        <goal>stop</goal>
+                    </goals>
+                    <phase>post-integration-test</phase>
+                    <configuration>
+                        <skip>${skip.IT}</skip>
+                    </configuration>
+                </execution>
+            </executions>
+            <configuration>
+                <excludes>
+                    <exclude>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j12</artifactId>
+                    </exclude>
+                    <exclude>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclude>
+                    <exclude>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j</artifactId>
+                    </exclude>
+                    <exclude>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-nop</artifactId>
+                    </exclude>
+                    <exclude>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclude>
+                </excludes>
+            </configuration>
+        </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>acceptance-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skip.IT}</skip>
+                            <includes>
+                                <include>**/CucumberITSuite.java</include>
+                            </includes>
+                            <argLine>--illegal-access=permit</argLine>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.trivago.rta</groupId>
+                <artifactId>cluecumber-report-plugin</artifactId>
+                <version>2.7.0</version>
+                <configuration>
+                    <sourceJsonReportDirectory>${project.build.directory}/cucumber-report</sourceJsonReportDirectory>
+                    <generatedHtmlReportDirectory>${project.build.directory}/generated-report
+                    </generatedHtmlReportDirectory>
+                    <customParameters>
+                        <_Text>This report shows the results of acceptance tests for Hello and GoodBye
+                        </_Text>
+                    </customParameters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>report</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>reporting</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
