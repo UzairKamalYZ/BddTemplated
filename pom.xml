@@ -84,78 +84,84 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>2.27.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
 
-        <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-            <executions>
-                <execution>
-                    <id>build-info</id>
-                    <goals>
-                        <goal>build-info</goal>
-                    </goals>
-                </execution>
-                <execution>
-                    <goals>
-                        <goal>repackage</goal>
-                    </goals>
-                </execution>
-                <execution>
-                    <id>start server for acceptance tests</id>
-                    <goals>
-                        <goal>start</goal>
-                    </goals>
-                    <phase>pre-integration-test</phase>
-                    <configuration>
-                        <skip>${skip.IT}</skip>
-                        <wait>5000</wait>
-                        <useTestClasspath>true</useTestClasspath>
-                        <directories>
-                            <directory>${project.basedir}/src/main/resources</directory>
-                            <directory>${project.build.testOutputDirectory}</directory>
-                        </directories>
-                        <fork>false</fork>
-                    </configuration>
-                </execution>
-                <execution>
-                    <id>stop server for acceptance tests</id>
-                    <goals>
-                        <goal>stop</goal>
-                    </goals>
-                    <phase>post-integration-test</phase>
-                    <configuration>
-                        <skip>${skip.IT}</skip>
-                    </configuration>
-                </execution>
-            </executions>
-            <configuration>
-                <excludes>
-                    <exclude>
-                        <groupId>org.apache.logging.log4j</groupId>
-                        <artifactId>log4j12</artifactId>
-                    </exclude>
-                    <exclude>
-                        <groupId>log4j</groupId>
-                        <artifactId>log4j</artifactId>
-                    </exclude>
-                    <exclude>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j</artifactId>
-                    </exclude>
-                    <exclude>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-nop</artifactId>
-                    </exclude>
-                    <exclude>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-                    </exclude>
-                </excludes>
-            </configuration>
-        </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-info</id>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>start server for acceptance tests</id>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <skip>${skip.IT}</skip>
+                            <wait>5000</wait>
+                            <useTestClasspath>true</useTestClasspath>
+                            <directories>
+                                <directory>${project.basedir}/src/main/resources</directory>
+                                <directory>${project.build.testOutputDirectory}</directory>
+                            </directories>
+                            <fork>false</fork>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop server for acceptance tests</id>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skip.IT}</skip>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.apache.logging.log4j</groupId>
+                            <artifactId>log4j12</artifactId>
+                        </exclude>
+                        <exclude>
+                            <groupId>log4j</groupId>
+                            <artifactId>log4j</artifactId>
+                        </exclude>
+                        <exclude>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j</artifactId>
+                        </exclude>
+                        <exclude>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-nop</artifactId>
+                        </exclude>
+                        <exclude>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-log4j12</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
