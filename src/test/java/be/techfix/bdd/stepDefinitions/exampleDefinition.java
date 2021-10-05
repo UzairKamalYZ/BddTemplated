@@ -15,6 +15,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
+
 public class exampleDefinition {
     private final CloseableHttpClient httpClient = HttpClients.createMinimal();
     private HttpResponse httpResponse;
@@ -33,6 +35,7 @@ public class exampleDefinition {
 
     @When("user call hello")
     public void userCallHello() throws IOException {
+        mockExternalDataCall();
         HttpGet httpRequest = new HttpGet("http://localhost:8080/bdd/hello");
         httpResponse = httpClient.execute(httpRequest);
     }
@@ -41,5 +44,10 @@ public class exampleDefinition {
     public void userCallBye() throws IOException {
         HttpGet httpRequest = new HttpGet("http://localhost:8080/bdd/bye");
         httpResponse = httpClient.execute(httpRequest);
+    }
+    public static void mockExternalDataCall() {
+        WireMock.stubFor(
+                WireMock.get("/anotherService/BringMeExternalData")
+                        .willReturn(WireMock.status(200).withBody("External Data")));
     }
 }
